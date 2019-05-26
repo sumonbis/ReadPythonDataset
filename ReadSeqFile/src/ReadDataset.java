@@ -11,24 +11,24 @@ import com.google.protobuf.CodedInputStream;
 public class ReadDataset {
 	
 	// Set this to location of the directory dataset_directory/ast/data
-	private static final String astpath = "/Users/sumon/python_updated/ast/data";
+		private static final String astpath = "/Users/sumon/python_updated/ast/data";
 
-	public static void main(String[] args) throws IOException {
-		Configuration conf = new Configuration();
-		FileSystem fileSystem = FileSystem.get(conf);
-	
-		Writable key = new LongWritable();
-		BytesWritable val = new BytesWritable();
-		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(astpath), conf);
+		public static void main(String[] args) throws IOException {
+			Configuration conf = new Configuration();
+			FileSystem fileSystem = FileSystem.get(conf);
 		
-		while (r.next(key, val)) {
-			System.out.println("--- NEXT PROJECT ---");
-			byte[] bytes = val.getBytes();
-			boa.types.Ast.ASTRoot ast = boa.types.Ast.ASTRoot.parseFrom((CodedInputStream.newInstance(bytes, 0, val.getLength())));
-			System.out.println(ast);
-			break;
+			Writable key = new LongWritable();
+			BytesWritable val = new BytesWritable();
+			SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(astpath), conf);
+			
+			while (r.next(key, val)) {
+				System.out.println("--- NEXT PROJECT ---");
+				byte[] bytes = val.getBytes();
+				boa.types.Ast.ASTRoot ast = boa.types.Ast.ASTRoot.parseFrom((CodedInputStream.newInstance(bytes, 0, val.getLength())));
+				System.out.println(ast);
+				break; // remove this line to print AST of all the files 
+			}
+			r.close();
 		}
-		r.close();
-	}
 
 }
